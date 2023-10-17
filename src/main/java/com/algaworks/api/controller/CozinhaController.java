@@ -1,19 +1,15 @@
 package com.algaworks.api.controller;
 
-import com.algaworks.domain.exception.EntidadeEmUsoException;
-import com.algaworks.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.domain.model.Cozinha;
 import com.algaworks.domain.repository.CozinhaRepository;
 import com.algaworks.domain.service.CadastroCozinhaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 //@RequestMapping(value="/cozinhas" /*produces = MediaType.APPLICATION_JSON_VALUE*/)
@@ -38,7 +34,7 @@ public class CozinhaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cozinha adicionar(@RequestBody Cozinha cozinha){
+    public Cozinha adicionar(@RequestBody @Valid Cozinha cozinha){
         return cadastroCozinhaService.salvar(cozinha);
     }
 
