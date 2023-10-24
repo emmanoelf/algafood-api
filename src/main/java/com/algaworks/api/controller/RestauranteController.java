@@ -1,8 +1,6 @@
 package com.algaworks.api.controller;
 
-import com.algaworks.Groups;
 import com.algaworks.domain.exception.CozinhaNaoEncontradaException;
-import com.algaworks.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.domain.exception.NegocioException;
 import com.algaworks.domain.exception.RestauranteNaoEncontradoException;
 import com.algaworks.domain.model.Restaurante;
@@ -11,15 +9,12 @@ import com.algaworks.domain.service.CadastroRestauranteService;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.hibernate.boot.model.naming.IllegalIdentifierException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,7 +22,6 @@ import javax.validation.Valid;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -47,7 +41,7 @@ public class RestauranteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Restaurante adicionar(@RequestBody @Validated(Groups.CadastroRestaurante.class) Restaurante restaurante) {
+    public Restaurante adicionar(@RequestBody @Valid Restaurante restaurante) {
         try{
             return cadastroRestauranteService.salvar(restaurante);
         }catch (CozinhaNaoEncontradaException e){
@@ -56,7 +50,7 @@ public class RestauranteController {
     }
 
     @PutMapping("/{id}")
-    public Restaurante atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante){
+    public Restaurante atualizar(@PathVariable Long id, @RequestBody @Valid Restaurante restaurante){
             try{
                 Restaurante getRestaurante = cadastroRestauranteService.buscarOuFalhar(id);
                 BeanUtils.copyProperties(restaurante, getRestaurante, "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
