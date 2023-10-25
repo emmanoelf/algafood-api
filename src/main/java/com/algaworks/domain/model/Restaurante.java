@@ -1,8 +1,6 @@
 package com.algaworks.domain.model;
 
 import com.algaworks.core.validation.Groups;
-import com.algaworks.core.validation.Multiplo;
-import com.algaworks.core.validation.TaxaFrete;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 import java.math.BigDecimal;
@@ -34,8 +33,7 @@ public class Restaurante {
     private String nome;
 
     @NotNull
-    @TaxaFrete
-    @Multiplo(numero = 5)
+    @PositiveOrZero
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
