@@ -1,6 +1,6 @@
 package com.algaworks.domain.model;
 
-import com.algaworks.Groups;
+import com.algaworks.core.validation.Groups;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
