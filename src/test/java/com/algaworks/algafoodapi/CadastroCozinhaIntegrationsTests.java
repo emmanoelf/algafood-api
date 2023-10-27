@@ -47,8 +47,7 @@ class CadastroCozinhaIntegrationsTests {
         EntidadeEmUsoException error = Assertions.assertThrows(
                 EntidadeEmUsoException.class, () -> {
                     cadastroCozinhaService.excluir(1L);
-                }
-        );
+                });
         assertThat(error).isNotNull();
     }
 
