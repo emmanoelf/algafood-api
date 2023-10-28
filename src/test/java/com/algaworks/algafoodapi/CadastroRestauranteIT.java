@@ -17,6 +17,8 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.hamcrest.Matchers.equalTo;
+
 import java.math.BigDecimal;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -86,6 +88,19 @@ public class CadastroRestauranteIT {
                 .post()
         .then()
                 .statusCode(HttpStatus.CREATED.value());
+    }
+
+    @Test
+    public void deveRetornarStatus400_QuandoCadastrarRestauranteSemFrete(){
+        RestAssured.given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body(jsonRestauranteSemFrete)
+        .when()
+                .post()
+        .then()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .body("title", equalTo(DADOS_INVALIDOS_PROBLEM_TITLE));
     }
 
     private void prepareData(){
