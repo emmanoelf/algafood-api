@@ -141,6 +141,17 @@ public class CadastroRestauranteIT {
                 .body("nome", equalTo(restaurante.getNome()));
     }
 
+    @Test
+    public void deveRetornarStatus400_QuandoConsultarRestauranteInexistente(){
+        RestAssured.given()
+                .pathParams("id", RESTAURANTE_ID_INEXISTENTE)
+                .contentType(ContentType.JSON)
+        .when()
+                .get("/{id}")
+        .then()
+                .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
     private void prepareData(){
         Cozinha cozinhaBrasileira = new Cozinha();
         cozinhaBrasileira.setNome("Brasileira");
