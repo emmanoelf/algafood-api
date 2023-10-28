@@ -78,9 +78,20 @@ public class CadastroCozinhaIT {
                 .accept(ContentType.JSON)
         .when()
                 .get("/{id}")
-                .then()
+        .then()
                 .statusCode(HttpStatus.OK.value())
                 .body("nome", equalTo("Americana"));
+    }
+
+    @Test
+    public void deveRetornarStatus404_QuandoConsultarCozinhaInexistente(){
+        RestAssured.given()
+                .pathParams("id", 666)
+                .accept(ContentType.JSON)
+        .when()
+                .get("/{id}")
+        .then()
+                .statusCode(HttpStatus.NOT_FOUND.value());
     }
 
     private void prepararDados(){
