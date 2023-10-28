@@ -76,7 +76,17 @@ public class CadastroRestauranteIT {
                 .body("", Matchers.hasSize(amountRestaurante));
     }
 
-
+    @Test
+    public void deveRetornarStatus201_QuandoCadastrarUmRestaurante(){
+        RestAssured.given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body(jsonRestauranteCorreto)
+        .when()
+                .post()
+        .then()
+                .statusCode(HttpStatus.CREATED.value());
+    }
 
     private void prepareData(){
         Cozinha cozinhaBrasileira = new Cozinha();
