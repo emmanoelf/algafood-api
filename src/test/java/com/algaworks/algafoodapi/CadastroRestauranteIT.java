@@ -103,6 +103,19 @@ public class CadastroRestauranteIT {
                 .body("title", equalTo(DADOS_INVALIDOS_PROBLEM_TITLE));
     }
 
+    @Test
+    public void deveRetornarStatus400_QuandoCadastrarRestauranteSemCozinha(){
+        RestAssured.given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .body(jsonRestauranteSemCozinha)
+        .when()
+                .post()
+        .then()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .body("title", equalTo(DADOS_INVALIDOS_PROBLEM_TITLE));
+    }
+
     private void prepareData(){
         Cozinha cozinhaBrasileira = new Cozinha();
         cozinhaBrasileira.setNome("Brasileira");
