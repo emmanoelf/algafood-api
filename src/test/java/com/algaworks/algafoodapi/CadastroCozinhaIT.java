@@ -14,6 +14,8 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 
+import static org.hamcrest.Matchers.equalTo;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
 public class CadastroCozinhaIT {
@@ -67,6 +69,18 @@ public class CadastroCozinhaIT {
                 .post()
         .then()
                 .statusCode(HttpStatus.CREATED.value());
+    }
+
+    @Test
+    public void deveRetornarRespostaEStatusCorretos_QuandoConsultarCozinhaExistente(){
+        RestAssured.given()
+                .pathParams("id", 2)
+                .accept(ContentType.JSON)
+        .when()
+                .get("/{id}")
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .body("nome", equalTo("Americana"));
     }
 
     private void prepararDados(){
