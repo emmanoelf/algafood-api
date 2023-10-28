@@ -24,7 +24,7 @@ import java.math.BigDecimal;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/application-test.properties")
 public class CadastroRestauranteIT {
-    private static final String VIOLACAO_DE_REGRA_DE_NEGOCIO_PROBLEM_TYPE = "Violação de regra de negócio";
+    private static final String VIOLACAO_DE_REGRA_DE_NEGOCIO_PROBLEM_TYPE = "Violação da regra de negócio";
     private static final String DADOS_INVALIDOS_PROBLEM_TITLE = "Dados inválidos";
     private static final int RESTAURANTE_ID_INEXISTENTE = 666;
 
@@ -114,6 +114,19 @@ public class CadastroRestauranteIT {
         .then()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .body("title", equalTo(DADOS_INVALIDOS_PROBLEM_TITLE));
+    }
+
+    @Test
+    public void deveRetornarStatus400_QuandoCadastrarRestauranteComCozinhaInexistente(){
+        RestAssured.given()
+                .body(jsonRestauranteComCozinhaInexistente)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+        .when()
+                .post()
+        .then()
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .body("title", equalTo(VIOLACAO_DE_REGRA_DE_NEGOCIO_PROBLEM_TYPE));
     }
 
     private void prepareData(){
