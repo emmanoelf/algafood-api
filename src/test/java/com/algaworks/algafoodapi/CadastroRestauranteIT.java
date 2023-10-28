@@ -129,6 +129,18 @@ public class CadastroRestauranteIT {
                 .body("title", equalTo(VIOLACAO_DE_REGRA_DE_NEGOCIO_PROBLEM_TYPE));
     }
 
+    @Test
+    public void deveRetornarRespostaEStatusCorretos_QuandoConsultarUmRestauranteExistente(){
+        RestAssured.given()
+                .pathParams("id", restaurante.getId())
+                .accept(ContentType.JSON)
+        .when()
+                .get("/{id}")
+        .then()
+                .statusCode(HttpStatus.OK.value())
+                .body("nome", equalTo(restaurante.getNome()));
+    }
+
     private void prepareData(){
         Cozinha cozinhaBrasileira = new Cozinha();
         cozinhaBrasileira.setNome("Brasileira");
