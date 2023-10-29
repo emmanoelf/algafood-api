@@ -2,15 +2,14 @@ package com.algaworks.domain.service;
 
 import com.algaworks.domain.exception.CidadeNaoEncontradaException;
 import com.algaworks.domain.exception.EntidadeEmUsoException;
-import com.algaworks.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.domain.model.Cidade;
 import com.algaworks.domain.model.Estado;
 import com.algaworks.domain.repository.CidadeRepository;
-import com.algaworks.domain.repository.EstadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CadastroCidadeService {
@@ -21,11 +20,9 @@ public class CadastroCidadeService {
     private CidadeRepository cidadeRepository;
 
     @Autowired
-    private EstadoRepository estadoRepository;
-
-    @Autowired
     private CadastroEstadoService estadoService;
 
+    @Transactional
     public Cidade salvar(Cidade cidade){
         Long estadoId = cidade.getEstado().getId();
         Estado estado = estadoService.buscarOuFalhar(estadoId);
@@ -34,6 +31,7 @@ public class CadastroCidadeService {
         return cidadeRepository.save(cidade);
     }
 
+    @Transactional
     public void excluir(Long id){
         try{
             cidadeRepository.deleteById(id);
