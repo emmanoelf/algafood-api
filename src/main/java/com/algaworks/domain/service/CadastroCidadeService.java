@@ -35,6 +35,7 @@ public class CadastroCidadeService {
     public void excluir(Long id){
         try{
             cidadeRepository.deleteById(id);
+            cidadeRepository.flush();
         }catch (DataIntegrityViolationException e){
             throw new EntidadeEmUsoException(String.format(MSG_CODIGO_CIDADE_EM_USO,
                     id));
