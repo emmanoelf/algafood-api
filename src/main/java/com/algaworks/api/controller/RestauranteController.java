@@ -2,6 +2,7 @@ package com.algaworks.api.controller;
 
 import com.algaworks.api.model.CozinhaDTO;
 import com.algaworks.api.model.RestauranteDTO;
+import com.algaworks.api.model.input.RestauranteInput;
 import com.algaworks.core.validation.ValidacaoException;
 import com.algaworks.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.domain.exception.NegocioException;
@@ -57,8 +58,9 @@ public class RestauranteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public RestauranteDTO adicionar(@RequestBody @Valid Restaurante restaurante) {
+    public RestauranteDTO adicionar(@RequestBody @Valid RestauranteInput restauranteInput) {
         try{
+            Restaurante restaurante = toDomainObject(restauranteInput);
             return toDTO(cadastroRestauranteService.salvar(restaurante));
         }catch (CozinhaNaoEncontradaException e){
             throw new NegocioException(e.getMessage());
@@ -66,8 +68,9 @@ public class RestauranteController {
     }
 
     @PutMapping("/{id}")
-    public RestauranteDTO atualizar(@PathVariable Long id, @RequestBody @Valid Restaurante restaurante){
+    public RestauranteDTO atualizar(@PathVariable Long id, @RequestBody @Valid RestauranteInput restauranteInput){
             try{
+                Restaurante restaurante = toDomainObject(restauranteInput);
                 Restaurante getRestaurante = cadastroRestauranteService.buscarOuFalhar(id);
                 BeanUtils.copyProperties(restaurante, getRestaurante, "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
                 return toDTO(cadastroRestauranteService.salvar(getRestaurante));
@@ -76,7 +79,7 @@ public class RestauranteController {
             }
     }
 
-    @PatchMapping("/{id}")
+    /*@PatchMapping("/{id}")
     public RestauranteDTO atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> campos,
                                         HttpServletRequest request){
         Restaurante getRestaurante = cadastroRestauranteService.buscarOuFalhar(id);
@@ -86,6 +89,7 @@ public class RestauranteController {
 
         return atualizar(id, getRestaurante);
     }
+     */
 
     private void validate(Restaurante restaurante, String objectName){
         BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurante, objectName);
@@ -132,5 +136,18 @@ public class RestauranteController {
     private List<RestauranteDTO> toColletionDTO(List<Restaurante> restaurantes){
         return restaurantes.stream().map(restaurante -> toDTO(restaurante))
                 .collect(Collectors.toList());
+    }
+
+    private Restaurante toDomainObject(RestauranteInput restauranteInput){
+        Restaurante restaurante = new Restaurante();
+        restaurante.setNome(restauranteInput.getNome());
+        restaurante.setTaxaFrete(restauranteInput.getTaxaFrete());
+
+        Cozinha cozinha = new Cozinha();
+        cozinha.setId(restauranteInput.getCozinha().getId());
+
+        restaurante.setCozinha(cozinha);
+
+        return restaurante;
     }
 }
