@@ -1,6 +1,5 @@
 package com.algaworks.domain.model;
 
-import com.algaworks.core.validation.Groups;
 import com.algaworks.core.validation.ValorZeroIncluiDescricao;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,12 +7,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.groups.ConvertGroup;
-import javax.validation.groups.Default;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -30,18 +23,12 @@ public class Restaurante {
     private Long id;
 
     @Column(nullable = false)
-    @NotBlank
     private String nome;
 
-    @NotNull
-    @PositiveOrZero
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
-    @Valid
-    @ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
-    @NotNull
-    @ManyToOne //(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name="cozinha_id", nullable = false)
     private Cozinha cozinha;
 
@@ -50,6 +37,9 @@ public class Restaurante {
             joinColumns = @JoinColumn(name = "restaurante_id"),
             inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
     private List<FormaPagamento> formasPagamento = new ArrayList<>();
+
+    @Column(name="ativo", nullable = false)
+    private Boolean ativo = Boolean.TRUE;
 
     @Embedded
     private Endereco endereco;
@@ -64,4 +54,12 @@ public class Restaurante {
 
     @OneToMany(mappedBy = "restaurante")
     private List<Produto> produtos = new ArrayList<>();
+
+    public void ativar(){
+        setAtivo(true);
+    }
+
+    public void inativar(){
+        setAtivo(false);
+    }
 }
