@@ -1,6 +1,7 @@
 package com.algaworks.domain.service;
 
 import com.algaworks.domain.exception.RestauranteNaoEncontradoException;
+import com.algaworks.domain.model.Cidade;
 import com.algaworks.domain.model.Cozinha;
 import com.algaworks.domain.model.Restaurante;
 import com.algaworks.domain.repository.RestauranteRepository;
@@ -17,13 +18,19 @@ public class CadastroRestauranteService {
     @Autowired
     private CadastroCozinhaService cozinhaService;
 
+    @Autowired
+    private CadastroCidadeService cadastroCidadeService;
+
     @Transactional
     public Restaurante salvar(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
+        Long cidadeId = restaurante.getEndereco().getCidade().getId();
 
         Cozinha cozinha = cozinhaService.buscarOuFalhar(cozinhaId);
+        Cidade cidade = cadastroCidadeService.buscarOuFalhar(cidadeId);
 
         restaurante.setCozinha(cozinha);
+        restaurante.getEndereco().setCidade(cidade);
 
         return restauranteRepository.save(restaurante);
     }

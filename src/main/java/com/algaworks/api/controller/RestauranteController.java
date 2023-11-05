@@ -4,6 +4,7 @@ import com.algaworks.api.assembler.RestauranteDTOAssembler;
 import com.algaworks.api.assembler.RestauranteInputDisassembler;
 import com.algaworks.api.model.RestauranteDTO;
 import com.algaworks.api.model.input.RestauranteInput;
+import com.algaworks.domain.exception.CidadeNaoEncontradaException;
 import com.algaworks.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.domain.exception.NegocioException;
 import com.algaworks.domain.exception.RestauranteNaoEncontradoException;
@@ -62,7 +63,7 @@ public class RestauranteController {
         try{
             Restaurante restaurante = restauranteInputDisassembler.toDomainObject(restauranteInput);
             return restauranteDTOAssembler.toDTO(cadastroRestauranteService.salvar(restaurante));
-        }catch (CozinhaNaoEncontradaException e){
+        }catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e){
             throw new NegocioException(e.getMessage());
         }
     }
@@ -73,7 +74,7 @@ public class RestauranteController {
                 Restaurante getRestaurante = cadastroRestauranteService.buscarOuFalhar(id);
                 restauranteInputDisassembler.copyToDomainObject(restauranteInput, getRestaurante);
                 return restauranteDTOAssembler.toDTO(cadastroRestauranteService.salvar(getRestaurante));
-            }catch (RestauranteNaoEncontradoException e){
+            }catch (RestauranteNaoEncontradoException | CidadeNaoEncontradaException e){
                 throw new NegocioException(e.getMessage());
             }
     }
