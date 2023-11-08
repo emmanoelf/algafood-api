@@ -43,6 +43,9 @@ public class Restaurante {
     @Column(name="ativo", nullable = false)
     private Boolean ativo = Boolean.TRUE;
 
+    @Column(name="aberto", nullable = false)
+    private Boolean aberto = Boolean.FALSE;
+
     @Embedded
     private Endereco endereco;
 
@@ -71,5 +74,13 @@ public class Restaurante {
 
     public boolean associarFormaPagamento(FormaPagamento formaPagamento){
         return this.getFormasPagamento().add(formaPagamento);
+    }
+
+    public void abrir(){
+        this.setAberto(true);
+    }
+
+    public void fechar(){
+        this.setAberto(false);
     }
 }
