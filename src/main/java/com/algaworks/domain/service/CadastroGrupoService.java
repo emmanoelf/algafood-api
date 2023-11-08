@@ -3,6 +3,7 @@ package com.algaworks.domain.service;
 import com.algaworks.domain.exception.EntidadeEmUsoException;
 import com.algaworks.domain.exception.GrupoNaoEncontradoException;
 import com.algaworks.domain.model.Grupo;
+import com.algaworks.domain.model.Permissao;
 import com.algaworks.domain.repository.GrupoRespository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -17,6 +18,9 @@ public class CadastroGrupoService {
 
     @Autowired
     private GrupoRespository grupoRespository;
+
+    @Autowired
+    private CadastroPermissaoService cadastroPermissaoService;
 
     @Transactional
     public Grupo salvar(Grupo grupo) { return this.grupoRespository.save(grupo); }
@@ -36,5 +40,19 @@ public class CadastroGrupoService {
     public Grupo buscarOuFalhar(Long id){
         return this.grupoRespository.findById(id).orElseThrow(() ->
                 new GrupoNaoEncontradoException(id));
+    }
+
+    @Transactional
+    public void associarPermissao(Long grupoId, Long permissaoId){
+        Permissao permissao = this.cadastroPermissaoService.buscarOuFalhar(permissaoId);
+        Grupo grupo = this.buscarOuFalhar(grupoId);
+        grupo.associarPermissao(permissao);
+    }
+
+    @Transactional
+    public void desassociarPermissao(Long grupoId, Long permissaoId){
+        Permissao permissao = this.cadastroPermissaoService.buscarOuFalhar(permissaoId);
+        Grupo grupo = this.buscarOuFalhar(grupoId);
+        grupo.desassociarPermissao(permissao);
     }
 }
