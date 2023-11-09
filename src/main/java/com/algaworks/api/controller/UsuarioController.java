@@ -34,7 +34,7 @@ public class UsuarioController {
     @GetMapping
     public List<UsuarioDTO> listar(){
         List<Usuario> usuarios = this.usuarioRepository.findAll();
-        return this.usuarioDTOAssembler.toCollectionList(usuarios);
+        return this.usuarioDTOAssembler.toCollectionDTO(usuarios);
     }
 
     @GetMapping("/{id}")
