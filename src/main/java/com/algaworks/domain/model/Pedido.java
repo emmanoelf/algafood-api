@@ -48,7 +48,7 @@ public class Pedido {
     @Embedded
     private Endereco enderecoEntrega;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private FormaPagamento formaPagamento;
 
