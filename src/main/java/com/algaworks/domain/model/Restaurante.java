@@ -97,4 +97,8 @@ public class Restaurante {
     public void desassociarResponsavel(Usuario usuario){
         this.getResponsaveis().remove(usuario);
     }
+
+    public boolean aceitaFormaPagamento(FormaPagamento formaPagamento){
+        return this.getFormasPagamento().contains(formaPagamento);
+    }
 }
