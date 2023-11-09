@@ -2,6 +2,7 @@ package com.algaworks.domain.service;
 
 import com.algaworks.domain.exception.NegocioException;
 import com.algaworks.domain.exception.UsuarioNaoEncontradoException;
+import com.algaworks.domain.model.Grupo;
 import com.algaworks.domain.model.Usuario;
 import com.algaworks.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ import java.util.Optional;
 public class CadastroUsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private CadastroGrupoService cadastroGrupoService;
 
     @Transactional
     public Usuario salvar(Usuario usuario){
@@ -42,5 +46,19 @@ public class CadastroUsuarioService {
     public Usuario buscarOuFalhar(Long id){
         return this.usuarioRepository.findById(id).orElseThrow(() ->
                 new UsuarioNaoEncontradoException(id));
+    }
+
+    @Transactional
+    public void associarGrupo(Long usuarioId, Long grupoId){
+        Usuario usuario = this.buscarOuFalhar(usuarioId);
+        Grupo grupo = this.cadastroGrupoService.buscarOuFalhar(grupoId);
+        usuario.associarGrupo(grupo);
+    }
+
+    @Transactional
+    public void desassociarGrupo(Long usuarioId, Long grupoId){
+        Usuario usuario = this.buscarOuFalhar(usuarioId);
+        Grupo grupo = this.cadastroGrupoService.buscarOuFalhar(grupoId);
+        usuario.desassociarGrupo(grupo);
     }
 }
