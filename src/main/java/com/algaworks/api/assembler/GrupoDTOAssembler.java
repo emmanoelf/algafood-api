@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,7 @@ public class GrupoDTOAssembler {
         return this.modelMapper.map(grupo, GrupoDTO.class);
     }
 
-    public List<GrupoDTO> toCollectionList(List<Grupo> grupos){
+    public List<GrupoDTO> toCollectionList(Collection<Grupo> grupos){
         return grupos.stream().map(this::toDTO).collect(Collectors.toList());
     }
 }
