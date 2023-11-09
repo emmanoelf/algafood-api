@@ -11,22 +11,18 @@ import com.algaworks.domain.exception.RestauranteNaoEncontradoException;
 import com.algaworks.domain.model.Restaurante;
 import com.algaworks.domain.repository.RestauranteRepository;
 import com.algaworks.domain.service.CadastroRestauranteService;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.http.server.ServletServerHttpRequest;
-import org.springframework.util.ReflectionUtils;
+//import org.springframework.http.converter.HttpMessageNotReadableException;
+//import org.springframework.http.server.ServletServerHttpRequest;
+//import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+//import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.lang.reflect.Field;
+//import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Map;
+//import java.util.Map;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -99,6 +95,27 @@ public class RestauranteController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void fechar(@PathVariable Long id) { this.cadastroRestauranteService.fechar(id); }
 
+    @PutMapping("/ativacoes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void ativarMultiplos(@RequestBody List<Long> restaurantesIds){
+        try{
+            this.cadastroRestauranteService.ativar(restaurantesIds);
+        }catch(RestauranteNaoEncontradoException e){
+            throw new NegocioException(e.getMessage(), e);
+        }
+    }
+
+    @DeleteMapping("/ativacoes")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void inativarMultiplos(@RequestBody List<Long> restaurantesIds){
+        try{
+            this.cadastroRestauranteService.inativar(restaurantesIds);
+        }catch (RestauranteNaoEncontradoException e){
+            throw new NegocioException(e.getMessage(), e);
+        }
+
+    }
+
     /*@PatchMapping("/{id}")
     public RestauranteDTO atualizarParcial(@PathVariable Long id, @RequestBody Map<String, Object> campos,
                                         HttpServletRequest request){
@@ -111,7 +128,7 @@ public class RestauranteController {
     }
      */
 
-    private void merge(Map<String, Object> dadosOrigem, Restaurante restauranteDestino, HttpServletRequest request){
+    /*private void merge(Map<String, Object> dadosOrigem, Restaurante restauranteDestino, HttpServletRequest request){
         ServletServerHttpRequest servletServer = new ServletServerHttpRequest(request);
         try{
             ObjectMapper objectMapper = new ObjectMapper();
@@ -128,5 +145,5 @@ public class RestauranteController {
             Throwable rootCause = ExceptionUtils.getRootCause(e);
             throw new HttpMessageNotReadableException(e.getMessage(), rootCause, servletServer);
         }
-    }
+    }*/
 }
