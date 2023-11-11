@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -20,6 +21,9 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
+
+    @Column(nullable = false)
+    private String codigo;
 
     @Column(nullable = false)
     private BigDecimal subtotal;
@@ -96,13 +100,18 @@ public class Pedido {
 
     private void setStatus(StatusPedido novoStatus){
         if(this.getStatus().naoPodeAlterarPara(novoStatus)){
-            throw new NegocioException(String.format("Status do pedido %d não pode ser alterado de %s para %s",
-                    this.getId(),
+            throw new NegocioException(String.format("Status do pedido %s não pode ser alterado de %s para %s",
+                    this.getCodigo(),
                     this.getStatus().getDescricao(),
                     novoStatus.getDescricao()
             ));
         }
 
         this.status = novoStatus;
+    }
+
+    @PrePersist
+    private void gerarCodigo(){
+        this.setCodigo(UUID.randomUUID().toString());
     }
 }
