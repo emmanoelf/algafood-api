@@ -1,5 +1,6 @@
 package com.algaworks.domain.model;
 
+import com.algaworks.domain.exception.NegocioException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
@@ -76,5 +77,32 @@ public class Pedido {
         this.subtotal = getItens().stream().map(item -> item.getPrecoTotal())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         this.valorTotal = this.subtotal.add(this.taxaFrete);
+    }
+
+    public void entregar(){
+        this.setStatus(StatusPedido.ENTREGUE);
+        this.setDataEntrega(OffsetDateTime.now());
+    }
+
+    public void cancelar(){
+        this.setStatus(StatusPedido.CANCELADO);
+        this.setDataCancelamento(OffsetDateTime.now());
+    }
+
+    public void confirmar(){
+        this.setStatus(StatusPedido.CONFIRMADO);
+        this.setDataConfirmacao(OffsetDateTime.now());
+    }
+
+    private void setStatus(StatusPedido novoStatus){
+        if(this.getStatus().naoPodeAlterarPara(novoStatus)){
+            throw new NegocioException(String.format("Status do pedido %d não pode ser alterado de %s para %s",
+                    this.getId(),
+                    this.getStatus().getDescricao(),
+                    novoStatus.getDescricao()
+            ));
+        }
+
+        this.status = novoStatus;
     }
 }
