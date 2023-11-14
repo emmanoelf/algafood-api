@@ -12,12 +12,8 @@ import com.algaworks.domain.model.Pedido;
 import com.algaworks.domain.model.Usuario;
 import com.algaworks.domain.repository.PedidoRepository;
 import com.algaworks.domain.service.EmissaoPedidoService;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -41,29 +37,10 @@ public class PedidoController {
     @Autowired
     private PedidoInputDisassembler pedidoInputDisassembler;
 
-    /*@GetMapping
+    @GetMapping
     public List<PedidoResumoDTO> listar(){
         List<Pedido> pedidos = this.pedidoRepository.findAll();
         return this.pedidoResumoDTOAssembler.toCollectionDTO(pedidos);
-    }*/
-
-    @GetMapping
-    public MappingJacksonValue listar(@RequestParam(required = false) String campos){
-        List<Pedido> pedidos = this.pedidoRepository.findAll();
-        List<PedidoResumoDTO> pedidosDTO = this.pedidoResumoDTOAssembler.toCollectionDTO(pedidos);
-
-        MappingJacksonValue pedidosWrapper = new MappingJacksonValue(pedidosDTO);
-
-        SimpleFilterProvider filterProvider = new SimpleFilterProvider();
-        filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.serializeAll());
-
-        if(StringUtils.isNotBlank(campos)){
-            filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.filterOutAllExcept(campos.split(",")));
-        }
-
-        pedidosWrapper.setFilters(filterProvider);
-
-        return pedidosWrapper;
     }
 
     @GetMapping("/{codigoPedido}")
