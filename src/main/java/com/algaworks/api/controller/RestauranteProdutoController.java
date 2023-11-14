@@ -35,9 +35,17 @@ public class RestauranteProdutoController {
     private ProdutoInputDisassembler produtoInputDisassembler;
 
     @GetMapping
-    public List<ProdutoDTO> listar(@PathVariable Long restauranteId){
+    public List<ProdutoDTO> listar(@PathVariable Long restauranteId,
+                                   @RequestParam(required = false) boolean incluirInativos){
         Restaurante restaurante = this.cadastroRestauranteService.buscarOuFalhar(restauranteId);
-        List<Produto> produtos = this.produtoRepository.findByRestaurante(restaurante);
+        List<Produto> produtos = null;
+
+        if(incluirInativos){
+            produtos = this.produtoRepository.findTodosByRestaurante(restaurante);
+        } else{
+            produtos =this.produtoRepository.findAtivosByRestaurante(restaurante);
+        }
+
         return this.produtoDTOAssembler.toCollectionDTO(produtos);
     }
 
