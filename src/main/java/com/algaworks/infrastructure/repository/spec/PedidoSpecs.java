@@ -10,8 +10,10 @@ import javax.persistence.criteria.Predicate;
 public class PedidoSpecs {
     public static Specification<Pedido> usandoFiltro(PedidoFilter filtro){
         return((root, query, criteriaBuilder) -> {
-            root.fetch("restaurante").fetch("cozinha");
-            root.fetch("cliente");
+            if(Pedido.class.equals(query.getResultType())){
+                root.fetch("restaurante").fetch("cozinha");
+                root.fetch("cliente");
+            }
 
             ArrayList<Predicate> predicates = new ArrayList<>();
 
