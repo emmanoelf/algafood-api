@@ -6,6 +6,7 @@ import com.algaworks.api.assembler.PedidoResumoDTOAssembler;
 import com.algaworks.api.model.PedidoDTO;
 import com.algaworks.api.model.PedidoResumoDTO;
 import com.algaworks.api.model.input.PedidoInput;
+import com.algaworks.core.data.PageableTranslator;
 import com.algaworks.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.domain.exception.NegocioException;
 import com.algaworks.domain.model.Pedido;
@@ -14,6 +15,7 @@ import com.algaworks.domain.repository.PedidoRepository;
 import com.algaworks.domain.repository.filter.PedidoFilter;
 import com.algaworks.domain.service.EmissaoPedidoService;
 import com.algaworks.infrastructure.repository.spec.PedidoSpecs;
+import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -45,6 +47,8 @@ public class PedidoController {
 
     @GetMapping
     public Page<PedidoResumoDTO> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10) Pageable pageable){
+        pageable = this.traduzirPageble(pageable);
+
         Page<Pedido> pedidosPage = this.pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
         List<PedidoResumoDTO> pedidosDTO = this.pedidoResumoDTOAssembler.toCollectionDTO(pedidosPage.getContent());
         Page<PedidoResumoDTO> pedidosPageDTO = new PageImpl<>(pedidosDTO, pageable, pedidosPage.getTotalElements());
@@ -71,5 +75,16 @@ public class PedidoController {
         }catch (EntidadeNaoEncontradaException e){
             throw new NegocioException(e.getMessage(), e);
         }
+    }
+
+    private Pageable traduzirPageble(Pageable apiPageable){
+        ImmutableMap<String, String> mapeamento = ImmutableMap.of(
+                "codigo", "codigo",
+                "restaurante.nome", "restaurante.nome",
+                "nomeCliente", "cliente.nome",
+                "valorTotal", "valorTotal"
+        );
+
+        return PageableTranslator.translate(apiPageable, mapeamento);
     }
 }
