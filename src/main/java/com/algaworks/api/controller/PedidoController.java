@@ -12,7 +12,7 @@ import com.algaworks.domain.exception.NegocioException;
 import com.algaworks.domain.model.Pedido;
 import com.algaworks.domain.model.Usuario;
 import com.algaworks.domain.repository.PedidoRepository;
-import com.algaworks.domain.repository.filter.PedidoFilter;
+import com.algaworks.domain.filter.PedidoFilter;
 import com.algaworks.domain.service.EmissaoPedidoService;
 import com.algaworks.infrastructure.repository.spec.PedidoSpecs;
 import com.google.common.collect.ImmutableMap;

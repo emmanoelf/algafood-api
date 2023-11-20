@@ -1,7 +1,7 @@
 package com.algaworks.infrastructure.repository.spec;
 
 import com.algaworks.domain.model.Pedido;
-import com.algaworks.domain.repository.filter.PedidoFilter;
+import com.algaworks.domain.filter.PedidoFilter;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
