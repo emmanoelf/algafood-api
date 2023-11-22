@@ -1,4 +1,4 @@
-package com.algaworks.infrastructure.service;
+package com.algaworks.infrastructure.service.query;
 
 import com.algaworks.domain.dto.VendaDiaria;
 import com.algaworks.domain.filter.VendaDiariaFilter;
