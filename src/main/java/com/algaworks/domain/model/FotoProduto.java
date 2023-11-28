@@ -26,4 +26,11 @@ public class FotoProduto {
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     private Produto produto;
+
+    public Long getRestauranteId(){
+        if(this.getProduto() != null){
+            return this.getProduto().getRestaurante().getId();
+        }
+        return null;
+    }
 }
