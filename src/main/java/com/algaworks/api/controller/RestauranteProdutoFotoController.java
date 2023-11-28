@@ -1,28 +1,46 @@
 package com.algaworks.api.controller;
 
+import com.algaworks.api.assembler.FotoProdutoDTOAssembler;
+import com.algaworks.api.model.FotoProdutoDTO;
 import com.algaworks.api.model.input.FotoProdutoInput;
+import com.algaworks.domain.model.FotoProduto;
+import com.algaworks.domain.model.Produto;
+import com.algaworks.domain.service.CadastroProdutoService;
+import com.algaworks.domain.service.CatalogoFotoProdutoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.nio.file.Path;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
 public class RestauranteProdutoFotoController {
+    @Autowired
+    private CatalogoFotoProdutoService catalogoFotoProdutoService;
+
+    @Autowired
+    private CadastroProdutoService cadastroProdutoService;
+
+    @Autowired
+    private FotoProdutoDTOAssembler fotoProdutoDTOAssembler;
+
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void atualizarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId, @Valid  FotoProdutoInput fotoProdutoInput){
-        var nomeArquivo = UUID.randomUUID().toString() + "_" + fotoProdutoInput.getArquivo().getOriginalFilename();
+    public FotoProdutoDTO atualizarFoto(@PathVariable Long restauranteId, @PathVariable Long produtoId, @Valid  FotoProdutoInput fotoProdutoInput){
+        Produto produto = this.cadastroProdutoService.buscarOuFalhar(restauranteId, produtoId);
 
-        var arquivoFoto = Path.of("path", nomeArquivo);
+        MultipartFile arquivo = fotoProdutoInput.getArquivo();
 
-        try{
-            fotoProdutoInput.getArquivo().transferTo(arquivoFoto);
-        }catch (Exception e){
-            throw new RuntimeException(e);
-        }
+        FotoProduto fotoProduto = new FotoProduto();
+        fotoProduto.setProduto(produto);
+        fotoProduto.setDescricao(fotoProdutoInput.getDescricao());
+        fotoProduto.setContentType(arquivo.getContentType());
+        fotoProduto.setTamanho(arquivo.getSize());
+        fotoProduto.setNomeArquivo(arquivo.getOriginalFilename());
 
+        FotoProduto fotoSalva = catalogoFotoProdutoService.salvar(fotoProduto);
+
+        return this.fotoProdutoDTOAssembler.toDTO(fotoSalva);
     }
 }
