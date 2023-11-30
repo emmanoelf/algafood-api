@@ -44,4 +44,10 @@ public class RestauranteProdutoFotoController {
 
         return this.fotoProdutoDTOAssembler.toDTO(fotoSalva);
     }
+
+    @GetMapping
+    public FotoProdutoDTO buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId){
+        FotoProduto fotoProduto = this.catalogoFotoProdutoService.buscarOuFalhar(restauranteId, produtoId);
+        return this.fotoProdutoDTOAssembler.toDTO(fotoProduto);
+    }
 }
