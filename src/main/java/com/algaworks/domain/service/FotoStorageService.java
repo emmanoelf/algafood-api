@@ -9,7 +9,7 @@ import java.util.UUID;
 public interface FotoStorageService {
     void armazenar(NovaFoto novaFoto);
     void remover(String nomeArquivo);
-    InputStream recuperar(String nomeArquivo);
+    FotoRecuperada recuperar(String nomeArquivo);
 
     default String gerarNomeArquivo(String nomeOriginal){
         return UUID.randomUUID() + "_" + nomeOriginal;
@@ -28,5 +28,20 @@ public interface FotoStorageService {
         private String nomeArquivo;
         private String contentType;
         private InputStream inputStream;
+    }
+
+    @Builder
+    @Getter
+    class FotoRecuperada{
+        private InputStream inputStream;
+        private String url;
+
+        public boolean temUrl(){
+            return this.url != null;
+        }
+
+        public boolean temInputStream(){
+            return this.inputStream != null;
+        }
     }
 }
