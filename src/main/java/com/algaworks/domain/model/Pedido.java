@@ -1,5 +1,6 @@
 package com.algaworks.domain.model;
 
+import com.algaworks.domain.event.PedidoCanceladoEvent;
 import com.algaworks.domain.event.PedidoConfirmadoEvent;
 import com.algaworks.domain.exception.NegocioException;
 import lombok.Data;
@@ -93,6 +94,7 @@ public class Pedido extends AbstractAggregateRoot<Pedido> {
     public void cancelar(){
         this.setStatus(StatusPedido.CANCELADO);
         this.setDataCancelamento(OffsetDateTime.now());
+        this.registerEvent(new PedidoCanceladoEvent(this));
     }
 
     public void confirmar(){
