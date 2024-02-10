@@ -6,6 +6,7 @@ import com.algaworks.domain.service.EnvioEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 public class NotificacaoClientePedidoConfirmadoListner {
@@ -13,7 +14,7 @@ public class NotificacaoClientePedidoConfirmadoListner {
     @Autowired
     private EnvioEmailService envioEmailService;
 
-    @EventListener
+    @TransactionalEventListener
     public void aoConfimarPedido(PedidoConfirmadoEvent event){
         Pedido pedido = event.getPedido();
 
