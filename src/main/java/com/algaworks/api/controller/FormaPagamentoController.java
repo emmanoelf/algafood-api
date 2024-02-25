@@ -8,11 +8,14 @@ import com.algaworks.domain.model.FormaPagamento;
 import com.algaworks.domain.repository.FormaPagamentoRepository;
 import com.algaworks.domain.service.CadastroFormaPagamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/formas-pagamento")
@@ -30,15 +33,23 @@ public class FormaPagamentoController {
     private FormaPagamentoInputDisassembler formaPagamentoInputDisassembler;
 
     @GetMapping
-    public List<FormaPagamentoDTO> listar(){
+    public ResponseEntity<List<FormaPagamentoDTO>> listar(){
         List<FormaPagamento> formasPagamentos = this.formaPagamentoRepository.findAll();
-        return formaPagamentoDTOAssembler.toColletionDTO(formasPagamentos);
+        List<FormaPagamentoDTO> formasPagamentoDTO = formaPagamentoDTOAssembler.toColletionDTO(formasPagamentos);
+
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+                .body(formasPagamentoDTO);
     }
 
     @GetMapping("/{id}")
-    public FormaPagamentoDTO buscar(@PathVariable Long id){
+    public ResponseEntity<FormaPagamentoDTO> buscar(@PathVariable Long id){
         FormaPagamento formaPagamento = this.cadastroFormaPagamentoService.buscarOuFalhar(id);
-        return formaPagamentoDTOAssembler.toDTO(formaPagamento);
+        FormaPagamentoDTO formaPagamentoDTO = formaPagamentoDTOAssembler.toDTO(formaPagamento);
+
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+                .body(formaPagamentoDTO);
     }
 
     @PostMapping
