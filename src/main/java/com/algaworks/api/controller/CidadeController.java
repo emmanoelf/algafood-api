@@ -9,6 +9,7 @@ import com.algaworks.domain.exception.NegocioException;
 import com.algaworks.domain.model.Cidade;
 import com.algaworks.domain.repository.CidadeRepository;
 import com.algaworks.domain.service.CadastroCidadeService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.BeanUtils;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@Api(tags = "Cidades")
 @RestController
 @RequestMapping("/cidades")
 public class CidadeController {
