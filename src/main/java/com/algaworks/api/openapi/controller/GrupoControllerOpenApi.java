@@ -1,4 +1,4 @@
-package com.algaworks.api.controller.openapi;
+package com.algaworks.api.openapi.controller;
 
 import com.algaworks.api.exceptionhandler.Problem;
 import com.algaworks.api.model.GrupoDTO;
