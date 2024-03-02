@@ -2,7 +2,7 @@ package com.algaworks.api.controller;
 
 import com.algaworks.api.assembler.CidadeDTOAssembler;
 import com.algaworks.api.assembler.CidadeInputDisassembler;
-import com.algaworks.api.controller.openapi.CidadeControllerOpenApi;
+import com.algaworks.api.openapi.controller.CidadeControllerOpenApi;
 import com.algaworks.api.model.CidadeDTO;
 import com.algaworks.api.model.input.CidadeInput;
 import com.algaworks.domain.exception.EstadoNaoEncontradoException;
