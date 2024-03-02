@@ -2,6 +2,7 @@ package com.algaworks.api.controller;
 
 import com.algaworks.api.assembler.GrupoDTOAssembler;
 import com.algaworks.api.assembler.GrupoInputDisassembler;
+import com.algaworks.api.controller.openapi.GrupoControllerOpenApi;
 import com.algaworks.api.model.GrupoDTO;
 import com.algaworks.api.model.input.GrupoInput;
 import com.algaworks.domain.model.Grupo;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/grupos")
-public class GrupoController {
+public class GrupoController implements GrupoControllerOpenApi {
     @Autowired
     private GrupoRespository grupoRespository;
 
