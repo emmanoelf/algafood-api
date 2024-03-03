@@ -6,6 +6,7 @@ import com.algaworks.api.assembler.PedidoResumoDTOAssembler;
 import com.algaworks.api.model.PedidoDTO;
 import com.algaworks.api.model.PedidoResumoDTO;
 import com.algaworks.api.model.input.PedidoInput;
+import com.algaworks.api.openapi.controller.PedidoControllerOpenApi;
 import com.algaworks.core.data.PageableTranslator;
 import com.algaworks.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.domain.exception.NegocioException;
@@ -22,14 +23,15 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/pedidos")
-public class PedidoController {
+@RequestMapping(path = "/pedidos", produces = MediaType.APPLICATION_JSON_VALUE)
+public class PedidoController implements PedidoControllerOpenApi {
     @Autowired
     private PedidoRepository pedidoRepository;
 

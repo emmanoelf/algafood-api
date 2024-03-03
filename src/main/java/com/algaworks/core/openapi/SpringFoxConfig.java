@@ -2,8 +2,10 @@ package com.algaworks.core.openapi;
 
 import com.algaworks.api.exceptionhandler.Problem;
 import com.algaworks.api.model.CozinhaDTO;
+import com.algaworks.api.model.PedidoResumoDTO;
 import com.algaworks.api.openapi.model.CozinhasDTOOpenApi;
 import com.algaworks.api.openapi.model.PageableModelOpenApi;
+import com.algaworks.api.openapi.model.PedidosResumoDTOOpenApi;
 import com.fasterxml.classmate.TypeResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,10 +18,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.builders.*;
 import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
@@ -57,11 +56,15 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                 .directModelSubstitute(Pageable.class, PageableModelOpenApi.class)
                 .alternateTypeRules(AlternateTypeRules.newRule(
                         typeResolver.resolve(Page.class, CozinhaDTO.class), CozinhasDTOOpenApi.class))
+                .alternateTypeRules(AlternateTypeRules.newRule(
+                        typeResolver.resolve(Page.class, PedidoResumoDTO.class), PedidosResumoDTOOpenApi.class
+                ))
                 .apiInfo(apiInfo())
                 .tags(new Tag("Cidades", "Gerencia as cidades"))
                 .tags(new Tag("Grupos", "Gerencia os grupos"))
                 .tags(new Tag("Cozinhas", "Gerencia as cozinhas"))
-                .tags(new Tag("Formas de pagamento", "Gerencia as formas de pagamento"));
+                .tags(new Tag("Formas de pagamento", "Gerencia as formas de pagamento"))
+                .tags(new Tag("Pedidos", "Gerencia os pedidos"));
     }
 
     private List<ResponseMessage> globalGetResponseMessages(){
