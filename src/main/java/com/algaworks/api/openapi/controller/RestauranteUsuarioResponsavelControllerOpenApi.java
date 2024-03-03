@@ -1,0 +1,44 @@
+package com.algaworks.api.openapi.controller;
+
+import com.algaworks.api.exceptionhandler.Problem;
+import com.algaworks.api.model.UsuarioDTO;
+import io.swagger.annotations.*;
+
+import java.util.List;
+
+@Api(tags = "Restaurantes")
+public interface RestauranteUsuarioResponsavelControllerOpenApi {
+    @ApiOperation("Lista os usuários responsáveis associados a restaurante")
+    @ApiResponses({
+            @ApiResponse(code = 404, message = "Restaurante não encontrado", response = Problem.class)
+    })
+    List<UsuarioDTO> listar(
+            @ApiParam(value = "ID do restaurante", example = "1", required = true)
+            Long restauranteId);
+
+    @ApiOperation("Desassociação de restaurante com usuário responsável")
+    @ApiResponses({
+            @ApiResponse(code = 204, message = "Desassociação realizada com sucesso"),
+            @ApiResponse(code = 404, message = "Restaurante ou usuário não encontrado",
+                    response = Problem.class)
+    })
+    void desassociarResponsavel(
+            @ApiParam(value = "ID do restaurante", example = "1", required = true)
+            Long restauranteId,
+
+            @ApiParam(value = "ID do usuário", example = "1", required = true)
+            Long usuarioId);
+
+    @ApiOperation("Associação de restaurante com usuário responsável")
+    @ApiResponses({
+            @ApiResponse(code = 204, message = "Associação realizada com sucesso"),
+            @ApiResponse(code = 404, message = "Restaurante ou usuário não encontrado",
+                    response = Problem.class)
+    })
+    void associarResponsavel(
+            @ApiParam(value = "ID do restaurante", example = "1", required = true)
+            Long restauranteId,
+
+            @ApiParam(value = "ID do usuário", example = "1", required = true)
+            Long usuarioId);
+}
