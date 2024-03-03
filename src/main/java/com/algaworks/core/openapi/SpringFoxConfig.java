@@ -67,14 +67,16 @@ public class SpringFoxConfig implements WebMvcConfigurer {
                         typeResolver.resolve(Page.class, PedidoResumoDTO.class), PedidosResumoDTOOpenApi.class
                 ))
                 .apiInfo(apiInfo())
-                .tags(new Tag("Cidades", "Gerencia as cidades"))
-                .tags(new Tag("Grupos", "Gerencia os grupos"))
-                .tags(new Tag("Cozinhas", "Gerencia as cozinhas"))
-                .tags(new Tag("Formas de pagamento", "Gerencia as formas de pagamento"))
-                .tags(new Tag("Pedidos", "Gerencia os pedidos"))
-                .tags(new Tag("Restaurantes", "Gerencia os restaurantes"))
-                .tags(new Tag("Estados", "Gerencia os estados"))
-                .tags(new Tag("Produtos", "Gerencia os produtos de restaurantes"));
+                .tags(new Tag("Cidades", "Gerencia as cidades"),
+                        new Tag("Grupos", "Gerencia os grupos"),
+                        new Tag("Cozinhas", "Gerencia as cozinhas"),
+                        new Tag("Formas de pagamento", "Gerencia as formas de pagamento"),
+                        new Tag("Pedidos", "Gerencia os pedidos"),
+                        new Tag("Restaurantes", "Gerencia os restaurantes"),
+                        new Tag("Estados", "Gerencia os estados"),
+                        new Tag("Produtos", "Gerencia os produtos de restaurantes"),
+                        new Tag("Usuários", "Gerencia os usuários")
+                        );
     }
 
     private List<ResponseMessage> globalGetResponseMessages(){

@@ -6,19 +6,21 @@ import com.algaworks.api.model.UsuarioDTO;
 import com.algaworks.api.model.input.UsuarioInput;
 import com.algaworks.api.model.input.UsuarioNovaSenhaInput;
 import com.algaworks.api.model.input.UsuarioNovoCadastroInput;
+import com.algaworks.api.openapi.controller.UsuarioControllerOpenApi;
 import com.algaworks.domain.model.Usuario;
 import com.algaworks.domain.repository.UsuarioRepository;
 import com.algaworks.domain.service.CadastroUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/usuarios")
-public class UsuarioController {
+@RequestMapping(path = "/usuarios", produces = MediaType.APPLICATION_JSON_VALUE)
+public class UsuarioController implements UsuarioControllerOpenApi {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
