@@ -14,7 +14,7 @@ public class EnderecoDTO {
     @ApiModelProperty(example = "Rua Randomicamente Randomica")
     private String logradouro;
 
-    @ApiModelProperty(example = "666")
+    @ApiModelProperty(example = "\"666\"")
     private String numero;
 
     @ApiModelProperty(example = "7")

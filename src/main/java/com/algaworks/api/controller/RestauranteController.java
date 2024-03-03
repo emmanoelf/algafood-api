@@ -5,6 +5,7 @@ import com.algaworks.api.assembler.RestauranteInputDisassembler;
 import com.algaworks.api.model.RestauranteDTO;
 import com.algaworks.api.model.input.RestauranteInput;
 import com.algaworks.api.model.view.RestauranteView;
+import com.algaworks.api.openapi.controller.RestauranteControllerOpenApi;
 import com.algaworks.domain.exception.CidadeNaoEncontradaException;
 import com.algaworks.domain.exception.CozinhaNaoEncontradaException;
 import com.algaworks.domain.exception.NegocioException;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 //import org.springframework.http.converter.HttpMessageNotReadableException;
 //import org.springframework.http.server.ServletServerHttpRequest;
 //import org.springframework.util.ReflectionUtils;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +30,8 @@ import java.util.List;
 //import java.util.Map;
 
 @RestController
-@RequestMapping("/restaurantes")
-public class RestauranteController {
+@RequestMapping(path = "/restaurantes", produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestauranteController implements RestauranteControllerOpenApi {
 
     @Autowired
     private RestauranteRepository restauranteRepository;
