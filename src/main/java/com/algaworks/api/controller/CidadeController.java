@@ -1,5 +1,6 @@
 package com.algaworks.api.controller;
 
+import com.algaworks.api.ResourceUriHelper;
 import com.algaworks.api.assembler.CidadeDTOAssembler;
 import com.algaworks.api.assembler.CidadeInputDisassembler;
 import com.algaworks.api.openapi.controller.CidadeControllerOpenApi;
@@ -52,6 +53,9 @@ public class CidadeController implements CidadeControllerOpenApi {
         try{
             Cidade cidade = cidadeInputDisassembler.toDomainObject(cidadeInput);
             cidade = cadastroCidadeService.salvar(cidade);
+
+            ResourceUriHelper.addUriInResponseHeader(cidade.getId());
+
             return cidadeDTOAssembler.toDTO(cidade);
         }catch (EstadoNaoEncontradoException e){
             throw new NegocioException(e.getMessage());
