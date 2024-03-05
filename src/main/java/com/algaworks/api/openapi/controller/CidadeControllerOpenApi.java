@@ -5,13 +5,12 @@ import com.algaworks.api.model.CidadeDTO;
 import com.algaworks.api.model.input.CidadeInput;
 
 import io.swagger.annotations.*;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 @Api(tags = "Cidades")
 public interface CidadeControllerOpenApi {
     @ApiOperation("Lista as cidades")
-    public List<CidadeDTO> listar();
+    public CollectionModel<CidadeDTO> listar();
 
     @ApiOperation("Busca uma cidade por ID")
     @ApiResponses({

@@ -12,6 +12,7 @@ import com.algaworks.domain.model.Cidade;
 import com.algaworks.domain.repository.CidadeRepository;
 import com.algaworks.domain.service.CadastroCidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -36,15 +37,15 @@ public class CidadeController implements CidadeControllerOpenApi {
     private CidadeInputDisassembler cidadeInputDisassembler;
 
     @GetMapping
-    public List<CidadeDTO> listar(){
+    public CollectionModel<CidadeDTO> listar(){
         List<Cidade> cidades = cidadeRepository.findAll();
-        return cidadeDTOAssembler.toCollectionDTO(cidades);
+        return cidadeDTOAssembler.toCollectionModel(cidades);
     }
 
     @GetMapping("/{id}")
     public CidadeDTO buscar(@PathVariable Long id){
         Cidade cidade = cadastroCidadeService.buscarOuFalhar(id);
-        return cidadeDTOAssembler.toDTO(cidade);
+        return cidadeDTOAssembler.toModel(cidade);
     }
 
     @PostMapping
@@ -56,7 +57,7 @@ public class CidadeController implements CidadeControllerOpenApi {
 
             ResourceUriHelper.addUriInResponseHeader(cidade.getId());
 
-            return cidadeDTOAssembler.toDTO(cidade);
+            return cidadeDTOAssembler.toModel(cidade);
         }catch (EstadoNaoEncontradoException e){
             throw new NegocioException(e.getMessage());
         }
@@ -68,7 +69,7 @@ public class CidadeController implements CidadeControllerOpenApi {
             Cidade getCidade = cadastroCidadeService.buscarOuFalhar(id);
             cidadeInputDisassembler.copyToDomainObject(cidadeInput, getCidade);
             getCidade = cadastroCidadeService.salvar(getCidade);
-            return cidadeDTOAssembler.toDTO(getCidade);
+            return cidadeDTOAssembler.toModel(getCidade);
         }catch (EstadoNaoEncontradoException e){
             throw new NegocioException(e.getMessage());
         }
