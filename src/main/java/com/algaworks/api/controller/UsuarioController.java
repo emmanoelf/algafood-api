@@ -11,6 +11,7 @@ import com.algaworks.domain.model.Usuario;
 import com.algaworks.domain.repository.UsuarioRepository;
 import com.algaworks.domain.service.CadastroUsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -34,15 +35,15 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     private UsuarioInputDisassembler usuarioInputDisassembler;
 
     @GetMapping
-    public List<UsuarioDTO> listar(){
+    public CollectionModel<UsuarioDTO> listar(){
         List<Usuario> usuarios = this.usuarioRepository.findAll();
-        return this.usuarioDTOAssembler.toCollectionDTO(usuarios);
+        return this.usuarioDTOAssembler.toCollectionModel(usuarios);
     }
 
     @GetMapping("/{id}")
     public UsuarioDTO buscar(@PathVariable Long id){
         Usuario usuario = this.cadastroUsuarioService.buscarOuFalhar(id);
-        return this.usuarioDTOAssembler.toDTO(usuario);
+        return this.usuarioDTOAssembler.toModel(usuario);
     }
 
     @PostMapping
@@ -50,7 +51,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
     public UsuarioDTO adicionar(@RequestBody @Valid UsuarioNovoCadastroInput usuarioNovoCadastroInput){
         Usuario usuario = this.usuarioInputDisassembler.toDomainObject(usuarioNovoCadastroInput);
         usuario = this.cadastroUsuarioService.salvar(usuario);
-        return this.usuarioDTOAssembler.toDTO(usuario);
+        return this.usuarioDTOAssembler.toModel(usuario);
     }
 
     @PutMapping("/{id}")
@@ -58,7 +59,7 @@ public class UsuarioController implements UsuarioControllerOpenApi {
         Usuario usuario = this.cadastroUsuarioService.buscarOuFalhar(id);
         this.usuarioInputDisassembler.copyToDomainObject(usuarioInput, usuario);
         usuario = this.cadastroUsuarioService.salvar(usuario);
-        return this.usuarioDTOAssembler.toDTO(usuario);
+        return this.usuarioDTOAssembler.toModel(usuario);
     }
 
     @PutMapping("/{id}/senha")

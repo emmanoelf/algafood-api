@@ -6,11 +6,10 @@ import com.algaworks.api.openapi.controller.RestauranteUsuarioResponsavelControl
 import com.algaworks.domain.model.Restaurante;
 import com.algaworks.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/restaurantes/{restauranteId}/responsaveis", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -22,9 +21,9 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
     private UsuarioDTOAssembler usuarioDTOAssembler;
 
     @GetMapping
-    public List<UsuarioDTO> listar(@PathVariable Long restauranteId){
+    public CollectionModel<UsuarioDTO> listar(@PathVariable Long restauranteId){
         Restaurante restaurante = this.cadastroRestauranteService.buscarOuFalhar(restauranteId);
-        return usuarioDTOAssembler.toCollectionDTO(restaurante.getResponsaveis());
+        return usuarioDTOAssembler.toCollectionModel(restaurante.getResponsaveis());
     }
 
     @PutMapping("/{usuarioId}")
