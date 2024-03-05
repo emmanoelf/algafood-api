@@ -7,6 +7,7 @@ import com.algaworks.domain.model.Restaurante;
 import com.algaworks.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,9 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
     @GetMapping
     public CollectionModel<UsuarioDTO> listar(@PathVariable Long restauranteId){
         Restaurante restaurante = this.cadastroRestauranteService.buscarOuFalhar(restauranteId);
-        return usuarioDTOAssembler.toCollectionModel(restaurante.getResponsaveis());
+        return usuarioDTOAssembler.toCollectionModel(restaurante.getResponsaveis()).removeLinks()
+                .add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
+                        .methodOn(RestauranteUsuarioResponsavelController.class).listar(restauranteId)).withSelfRel());
     }
 
     @PutMapping("/{usuarioId}")
