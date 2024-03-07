@@ -9,9 +9,6 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Component
 public class PedidoDTOAssembler extends RepresentationModelAssemblerSupport<Pedido, PedidoDTO> {
     @Autowired
@@ -45,7 +42,7 @@ public class PedidoDTOAssembler extends RepresentationModelAssemblerSupport<Pedi
                 (WebMvcLinkBuilder.methodOn(FormaPagamentoController.class)
                         .buscar(pedido.getFormaPagamento().getId(), null)).withSelfRel());
 
-        pedidoDto.getItens().forEach(item ->{
+        pedidoDto.getItens().forEach(item -> {
             item.add(WebMvcLinkBuilder.linkTo
                     (WebMvcLinkBuilder.methodOn(RestauranteProdutoController.class)
                             .buscar(pedido.getRestaurante().getId(), item.getProdutoId())).withRel("produto"));
