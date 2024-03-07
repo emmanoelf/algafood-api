@@ -7,6 +7,7 @@ import com.algaworks.api.model.PedidoDTO;
 import com.algaworks.api.model.PedidoResumoDTO;
 import com.algaworks.api.model.input.PedidoInput;
 import com.algaworks.api.openapi.controller.PedidoControllerOpenApi;
+import com.algaworks.core.data.PageWrapper;
 import com.algaworks.core.data.PageableTranslator;
 import com.algaworks.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.domain.exception.NegocioException;
@@ -52,9 +53,10 @@ public class PedidoController implements PedidoControllerOpenApi {
 
     @GetMapping
     public PagedModel<PedidoResumoDTO> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10) Pageable pageable){
-        pageable = this.traduzirPageble(pageable);
+        Pageable pageableTraduzido = this.traduzirPageble(pageable);
 
-        Page<Pedido> pedidosPage = this.pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
+        Page<Pedido> pedidosPage = this.pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageableTraduzido);
+        pedidosPage = new PageWrapper<>(pedidosPage, pageable);
 
         return pagedResourcesAssembler.toModel(pedidosPage, pedidoResumoDTOAssembler);
     }
