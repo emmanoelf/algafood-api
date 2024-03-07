@@ -19,15 +19,15 @@ import com.algaworks.infrastructure.repository.spec.PedidoSpecs;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/pedidos", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -47,20 +47,22 @@ public class PedidoController implements PedidoControllerOpenApi {
     @Autowired
     private PedidoInputDisassembler pedidoInputDisassembler;
 
+    @Autowired
+    private PagedResourcesAssembler<Pedido> pagedResourcesAssembler;
+
     @GetMapping
-    public Page<PedidoResumoDTO> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10) Pageable pageable){
+    public PagedModel<PedidoResumoDTO> pesquisar(PedidoFilter filtro, @PageableDefault(size = 10) Pageable pageable){
         pageable = this.traduzirPageble(pageable);
 
         Page<Pedido> pedidosPage = this.pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filtro), pageable);
-        List<PedidoResumoDTO> pedidosDTO = this.pedidoResumoDTOAssembler.toCollectionDTO(pedidosPage.getContent());
-        Page<PedidoResumoDTO> pedidosPageDTO = new PageImpl<>(pedidosDTO, pageable, pedidosPage.getTotalElements());
-        return pedidosPageDTO;
+
+        return pagedResourcesAssembler.toModel(pedidosPage, pedidoResumoDTOAssembler);
     }
 
     @GetMapping("/{codigoPedido}")
     public PedidoDTO buscar(@PathVariable String codigoPedido){
         Pedido pedido = this.emissaoPedidoService.buscarOuFalhar(codigoPedido);
-        return this.pedidoDTOAssembler.toDTO(pedido);
+        return this.pedidoDTOAssembler.toModel(pedido);
     }
 
     @PostMapping
@@ -73,7 +75,7 @@ public class PedidoController implements PedidoControllerOpenApi {
 
             pedido = this.emissaoPedidoService.emitir(pedido);
 
-            return this.pedidoDTOAssembler.toDTO(pedido);
+            return this.pedidoDTOAssembler.toModel(pedido);
         }catch (EntidadeNaoEncontradaException e){
             throw new NegocioException(e.getMessage(), e);
         }
