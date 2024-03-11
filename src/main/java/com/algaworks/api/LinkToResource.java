@@ -120,4 +120,19 @@ public class LinkToResource {
     public Link linkToCozinhas(){
         return this.linkToCozinhas(IanaLinkRelations.SELF.value());
     }
+
+    public Link linkToConfirmacaoPedido(String codigoPedigo, String rel){
+        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FluxoPedidoController.class)
+                .confirmar(codigoPedigo)).withRel(rel);
+    }
+
+    public Link linkToCancelamentoPedido(String codigoPedigo, String rel){
+        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FluxoPedidoController.class)
+                .cancelar(codigoPedigo)).withRel(rel);
+    }
+
+    public Link linkToEntregaPedido(String codigoPedigo, String rel){
+        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FluxoPedidoController.class)
+                .entregar(codigoPedigo)).withRel(rel);
+    }
 }

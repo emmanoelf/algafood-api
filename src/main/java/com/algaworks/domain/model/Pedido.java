@@ -115,6 +115,18 @@ public class Pedido extends AbstractAggregateRoot<Pedido> {
         this.status = novoStatus;
     }
 
+    public boolean podeSerConfirmado(){
+        return this.getStatus().podeAlterarPara(StatusPedido.CONFIRMADO);
+    }
+
+    public boolean podeSerEntregue(){
+        return this.getStatus().podeAlterarPara(StatusPedido.ENTREGUE);
+    }
+
+    public boolean podeSerCancelado(){
+        return this.getStatus().podeAlterarPara(StatusPedido.CANCELADO);
+    }
+
     @PrePersist
     private void gerarCodigo(){
         this.setCodigo(UUID.randomUUID().toString());

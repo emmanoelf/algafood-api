@@ -29,6 +29,18 @@ public class PedidoDTOAssembler extends RepresentationModelAssemblerSupport<Pedi
 
         pedidoDto.add(this.linkToResource.linkToPedidos());
 
+        if(pedido.podeSerConfirmado()){
+            pedidoDto.add(this.linkToResource.linkToConfirmacaoPedido(pedido.getCodigo(), "confirmacao"));
+        }
+
+        if(pedido.podeSerCancelado()){
+            pedidoDto.add(this.linkToResource.linkToCancelamentoPedido(pedido.getCodigo(), "cancelamento"));
+        }
+
+        if(pedido.podeSerEntregue()){
+            pedidoDto.add(this.linkToResource.linkToEntregaPedido(pedido.getCodigo(), "entrega"));
+        }
+
         pedidoDto.getRestaurante().add(this.linkToResource.linkToRestaurante(pedido.getRestaurante().getId()));
 
         pedidoDto.getCliente().add(this.linkToResource.linkToUsuario(pedido.getCliente().getId()));
