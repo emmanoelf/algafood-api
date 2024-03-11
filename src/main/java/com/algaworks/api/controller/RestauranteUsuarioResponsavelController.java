@@ -1,5 +1,6 @@
 package com.algaworks.api.controller;
 
+import com.algaworks.api.LinkToResource;
 import com.algaworks.api.assembler.UsuarioDTOAssembler;
 import com.algaworks.api.model.UsuarioDTO;
 import com.algaworks.api.openapi.controller.RestauranteUsuarioResponsavelControllerOpenApi;
@@ -7,7 +8,6 @@ import com.algaworks.domain.model.Restaurante;
 import com.algaworks.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +21,14 @@ public class RestauranteUsuarioResponsavelController implements RestauranteUsuar
     @Autowired
     private UsuarioDTOAssembler usuarioDTOAssembler;
 
+    @Autowired
+    private LinkToResource linkToResource;
+
     @GetMapping
     public CollectionModel<UsuarioDTO> listar(@PathVariable Long restauranteId){
         Restaurante restaurante = this.cadastroRestauranteService.buscarOuFalhar(restauranteId);
         return usuarioDTOAssembler.toCollectionModel(restaurante.getResponsaveis()).removeLinks()
-                .add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
-                        .methodOn(RestauranteUsuarioResponsavelController.class).listar(restauranteId)).withSelfRel());
+                .add(this.linkToResource.linkToResponsaveisRestaurante(restauranteId));
     }
 
     @PutMapping("/{usuarioId}")

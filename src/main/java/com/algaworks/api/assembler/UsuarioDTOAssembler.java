@@ -1,7 +1,7 @@
 package com.algaworks.api.assembler;
 
+import com.algaworks.api.LinkToResource;
 import com.algaworks.api.controller.UsuarioController;
-import com.algaworks.api.controller.UsuarioGrupoController;
 import com.algaworks.api.model.UsuarioDTO;
 import com.algaworks.domain.model.Usuario;
 import org.modelmapper.ModelMapper;
@@ -11,15 +11,14 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Component
 public class UsuarioDTOAssembler extends RepresentationModelAssemblerSupport<Usuario, UsuarioDTO> {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private LinkToResource linkToResource;
 
     public UsuarioDTOAssembler(){
         super(UsuarioController.class, UsuarioDTO.class);
@@ -29,11 +28,9 @@ public class UsuarioDTOAssembler extends RepresentationModelAssemblerSupport<Usu
         UsuarioDTO usuarioDto = createModelWithId(usuario.getId(), usuario);
         this.modelMapper.map(usuario, usuarioDto);
 
-        usuarioDto.add(WebMvcLinkBuilder
-                .linkTo(UsuarioController.class).withSelfRel());
+        usuarioDto.add(this.linkToResource.linkToUsuarios("usuarios"));
 
-        usuarioDto.add(WebMvcLinkBuilder
-                .linkTo(WebMvcLinkBuilder.methodOn(UsuarioGrupoController.class).listar(usuario.getId())).withRel("usuarios"));
+        usuarioDto.add(this.linkToResource.linkToUsuario(usuarioDto.getId(), "grupos-usuario"));
 
         return usuarioDto;
     }

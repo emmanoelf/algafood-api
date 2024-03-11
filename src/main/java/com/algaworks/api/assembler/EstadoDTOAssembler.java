@@ -1,5 +1,6 @@
 package com.algaworks.api.assembler;
 
+import com.algaworks.api.LinkToResource;
 import com.algaworks.api.controller.EstadoController;
 import com.algaworks.api.model.EstadoDTO;
 import com.algaworks.domain.model.Estado;
@@ -10,13 +11,13 @@ import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSuppor
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Component
 public class EstadoDTOAssembler extends RepresentationModelAssemblerSupport<Estado, EstadoDTO> {
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private LinkToResource linkToResource;
 
     public EstadoDTOAssembler(){
         super(EstadoController.class, EstadoDTO.class);
@@ -27,7 +28,7 @@ public class EstadoDTOAssembler extends RepresentationModelAssemblerSupport<Esta
 
         modelMapper.map(estado, estadoDto);
 
-        estadoDto.add(WebMvcLinkBuilder.linkTo(EstadoController.class).withSelfRel());
+        estadoDto.add(this.linkToResource.linkToEstados("estados"));
 
         return estadoDto;
     }
