@@ -159,6 +159,10 @@ public class LinkToResource {
                 .listar(id)).withRel(rel);
     }
 
+    public Link linkToRestauranteFormasPagamento(Long id){
+        return this.linkToRestauranteFormasPagamento(id, IanaLinkRelations.SELF.value());
+    }
+
     public Link linkToCozinha(Long id, String rel){
         return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CozinhaController.class).buscar(id)).withRel(rel);
     }
@@ -181,5 +185,13 @@ public class LinkToResource {
 
     public Link linkToInativarRestaurante(Long id, String rel){
         return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RestauranteController.class).inativar(id)).withRel(rel);
+    }
+
+    public Link linkToFormasPagamento(String rel){
+        return WebMvcLinkBuilder.linkTo(FormaPagamentoController.class).withRel(rel);
+    }
+
+    public Link linkToFormasPagamento(){
+        return this.linkToFormasPagamento(IanaLinkRelations.SELF.value());
     }
 }

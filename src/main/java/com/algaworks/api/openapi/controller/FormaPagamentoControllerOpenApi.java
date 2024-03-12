@@ -4,16 +4,15 @@ import com.algaworks.api.exceptionhandler.Problem;
 import com.algaworks.api.model.FormaPagamentoDTO;
 import com.algaworks.api.model.input.FormaPagamentoInput;
 import io.swagger.annotations.*;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.ServletWebRequest;
-
-import java.util.List;
 
 @Api(tags = "Formas de pagamento")
 public interface FormaPagamentoControllerOpenApi {
 
     @ApiOperation("Lista as formas de pagamento")
-    ResponseEntity<List<FormaPagamentoDTO>> listar(ServletWebRequest request);
+    ResponseEntity<CollectionModel<FormaPagamentoDTO>> listar(ServletWebRequest request);
 
     @ApiOperation("Busca uma forma de pagamento pelo ID")
     @ApiResponses({
