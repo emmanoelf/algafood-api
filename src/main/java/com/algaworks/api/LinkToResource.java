@@ -160,4 +160,20 @@ public class LinkToResource {
     public Link linkToCozinha(Long id){
         return linkToCozinha(id, IanaLinkRelations.SELF.value());
     }
+
+    public Link linkToAberturaRestaurante(Long id, String rel){
+        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RestauranteController.class).abrir(id)).withRel(rel);
+    }
+
+    public Link linkToFechamentoRestaurante(Long id, String rel){
+        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RestauranteController.class).fechar(id)).withRel(rel);
+    }
+
+    public Link linkToAtivarRestaurante(Long id, String rel){
+        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RestauranteController.class).ativar(id)).withRel(rel);
+    }
+
+    public Link linkToInativarRestaurante(Long id, String rel){
+        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RestauranteController.class).inativar(id)).withRel(rel);
+    }
 }
