@@ -8,7 +8,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -30,14 +29,13 @@ public class UsuarioDTOAssembler extends RepresentationModelAssemblerSupport<Usu
 
         usuarioDto.add(this.linkToResource.linkToUsuarios("usuarios"));
 
-        usuarioDto.add(this.linkToResource.linkToUsuario(usuarioDto.getId(), "grupos-usuario"));
+        usuarioDto.add(this.linkToResource.linkToGruposUsuario(usuarioDto.getId(), "grupos-usuario"));
 
         return usuarioDto;
     }
 
     @Override
     public CollectionModel<UsuarioDTO> toCollectionModel(Iterable<? extends Usuario> entities) {
-        return super.toCollectionModel(entities)
-                .add(WebMvcLinkBuilder.linkTo(UsuarioController.class).withSelfRel());
+        return super.toCollectionModel(entities).add(this.linkToResource.linktoUsuarios());
     }
 }

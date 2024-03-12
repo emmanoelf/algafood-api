@@ -88,6 +88,10 @@ public class LinkToResource {
         return WebMvcLinkBuilder.linkTo(CidadeController.class).withRel(rel);
     }
 
+    public Link linkToCidades(){
+        return this.linkToCidades(IanaLinkRelations.SELF.value());
+    }
+
     public Link linkToEstado(Long id, String rel){
         return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EstadoController.class).buscar(id)).withRel(rel);
     }
@@ -134,5 +138,26 @@ public class LinkToResource {
     public Link linkToEntregaPedido(String codigoPedigo, String rel){
         return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(FluxoPedidoController.class)
                 .entregar(codigoPedigo)).withRel(rel);
+    }
+
+    public Link linkToRestaurantes(String rel){
+        return WebMvcLinkBuilder.linkTo(RestauranteController.class).withRel(rel);
+    }
+
+    public Link linkToRestaurantes(){
+        return this.linkToRestaurantes(IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToRestauranteFormasPagamento(Long id, String rel){
+        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(RestauranteFormaPagamentoController.class)
+                .listar(id)).withRel(rel);
+    }
+
+    public Link linkToCozinha(Long id, String rel){
+        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(CozinhaController.class).buscar(id)).withRel(rel);
+    }
+
+    public Link linkToCozinha(Long id){
+        return linkToCozinha(id, IanaLinkRelations.SELF.value());
     }
 }

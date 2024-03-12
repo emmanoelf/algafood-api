@@ -1,26 +1,50 @@
 package com.algaworks.api.assembler;
 
+import com.algaworks.api.LinkToResource;
+import com.algaworks.api.controller.RestauranteController;
 import com.algaworks.api.model.RestauranteDTO;
 import com.algaworks.domain.model.Restaurante;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Component
-public class RestauranteDTOAssembler {
+public class RestauranteDTOAssembler extends RepresentationModelAssemblerSupport<Restaurante, RestauranteDTO> {
 
     @Autowired
     private ModelMapper modelMapper;
 
-    public RestauranteDTO toDTO(Restaurante restaurante) {
-        return modelMapper.map(restaurante, RestauranteDTO.class);
+    @Autowired
+    private LinkToResource linkToResource;
+
+    public RestauranteDTOAssembler(){
+        super(RestauranteController.class, RestauranteDTO.class);
     }
 
-    public List<RestauranteDTO> toColletionDTO(List<Restaurante> restaurantes){
-        return restaurantes.stream().map(restaurante -> toDTO(restaurante))
-                .collect(Collectors.toList());
+    @Override
+    public RestauranteDTO toModel(Restaurante restaurante) {
+        RestauranteDTO restauranteDTO = createModelWithId(restaurante.getId(), restaurante);
+
+        this.modelMapper.map(restaurante, restauranteDTO);
+
+        restauranteDTO.add(this.linkToResource.linkToRestaurantes("restaurantes"));
+
+        restauranteDTO.getCozinha().add(this.linkToResource.linkToCozinha(restaurante.getCozinha().getId()));
+
+        restauranteDTO.getEndereco().getCidade().add(this.linkToResource
+                .linkToCidade(restaurante.getEndereco().getCidade().getId()));
+
+        restauranteDTO.add(this.linkToResource.linkToRestauranteFormasPagamento(restaurante.getId(), "formas-pagamento"));
+
+        restauranteDTO.add(this.linkToResource.linkToResponsaveisRestaurante(restaurante.getId(), "responsaveis"));
+
+        return restauranteDTO;
+    }
+
+    @Override
+    public CollectionModel<RestauranteDTO> toCollectionModel(Iterable<? extends Restaurante> entities) {
+        return super.toCollectionModel(entities).add(this.linkToResource.linkToRestaurantes());
     }
 }
