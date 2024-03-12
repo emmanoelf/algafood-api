@@ -29,7 +29,7 @@ public class RestauranteBasicoModelAssembler extends RepresentationModelAssemble
 
         modelMapper.map(restaurante, restauranteModel);
 
-        restauranteModel.add(this.linkToResource.linkToRestaurantes("restaurante"));
+        restauranteModel.add(this.linkToResource.linkToRestaurantes("restaurantes"));
 
         restauranteModel.getCozinha().add(this.linkToResource.linkToCozinha(restaurante.getCozinha().getId()));
 

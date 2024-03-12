@@ -27,7 +27,7 @@ public class PedidoResumoDTOAssembler extends RepresentationModelAssemblerSuppor
 
         this.modelMapper.map(pedido, pedidoResumoDto);
 
-        pedidoResumoDto.add(this.linkToResource.linkToPedidos());
+        pedidoResumoDto.add(this.linkToResource.linkToPedidos("pedidos"));
 
         pedidoResumoDto.getRestaurante().add(this.linkToResource.linkToRestaurante(pedido.getRestaurante().getId()));
 

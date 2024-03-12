@@ -27,7 +27,7 @@ public class PedidoDTOAssembler extends RepresentationModelAssemblerSupport<Pedi
 
         this.modelMapper.map(pedido, pedidoDto);
 
-        pedidoDto.add(this.linkToResource.linkToPedidos());
+        pedidoDto.add(this.linkToResource.linkToPedidos("pedidos"));
 
         if(pedido.podeSerConfirmado()){
             pedidoDto.add(this.linkToResource.linkToConfirmacaoPedido(pedido.getCodigo(), "confirmacao"));
