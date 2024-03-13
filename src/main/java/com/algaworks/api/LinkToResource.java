@@ -208,4 +208,18 @@ public class LinkToResource {
                 .associar(restauranteId, null))
                 .withRel(rel);
     }
+
+    public Link linkToRestauranteResponsavelDesassociacao(Long restauranteId, Long usuarioId, String rel){
+        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
+                .methodOn(RestauranteUsuarioResponsavelController.class)
+                .desassociarResponsavel(restauranteId, usuarioId))
+                .withRel(rel);
+    }
+
+    public Link linkToRestauranteResponsavelAssociacao(Long restauranteId, String rel){
+        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
+                .methodOn(RestauranteUsuarioResponsavelController.class)
+                .desassociarResponsavel(restauranteId, null))
+                .withRel(rel);
+    }
 }

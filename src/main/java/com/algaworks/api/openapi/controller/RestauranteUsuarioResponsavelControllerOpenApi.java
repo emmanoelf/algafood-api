@@ -4,6 +4,7 @@ import com.algaworks.api.exceptionhandler.Problem;
 import com.algaworks.api.model.UsuarioDTO;
 import io.swagger.annotations.*;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 @Api(tags = "Restaurantes")
 public interface RestauranteUsuarioResponsavelControllerOpenApi {
@@ -21,7 +22,7 @@ public interface RestauranteUsuarioResponsavelControllerOpenApi {
             @ApiResponse(code = 404, message = "Restaurante ou usuário não encontrado",
                     response = Problem.class)
     })
-    void desassociarResponsavel(
+    ResponseEntity<Void> desassociarResponsavel(
             @ApiParam(value = "ID do restaurante", example = "1", required = true)
             Long restauranteId,
 
@@ -34,7 +35,7 @@ public interface RestauranteUsuarioResponsavelControllerOpenApi {
             @ApiResponse(code = 404, message = "Restaurante ou usuário não encontrado",
                     response = Problem.class)
     })
-    void associarResponsavel(
+    ResponseEntity<Void> associarResponsavel(
             @ApiParam(value = "ID do restaurante", example = "1", required = true)
             Long restauranteId,
 
