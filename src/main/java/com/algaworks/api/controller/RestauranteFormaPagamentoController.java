@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,20 +28,33 @@ public class RestauranteFormaPagamentoController implements RestauranteFormaPaga
     @GetMapping
     public CollectionModel<FormaPagamentoDTO> listar(@PathVariable Long id){
         Restaurante restaurante = this.cadastroRestauranteService.buscarOuFalhar(id);
-        return formaPagamentoDTOAssembler.toCollectionModel(restaurante.getFormasPagamento())
+        CollectionModel<FormaPagamentoDTO> formasPagamentoDto = formaPagamentoDTOAssembler
+                .toCollectionModel(restaurante.getFormasPagamento())
                 .removeLinks()
-                .add(this.linkToResource.linkToRestauranteFormasPagamento(id));
+                .add(this.linkToResource.linkToRestauranteFormasPagamento(id))
+                .add(this.linkToResource.linkToFormaPagamentAssociacao(id, "associar"));
+
+        formasPagamentoDto.getContent().forEach(formaPagamento -> {
+            formaPagamento.add(this.linkToResource
+                    .linkToFormaPagamentoDesassociacao(id, formaPagamento.getId(), "desassociar"));
+        });
+
+        return formasPagamentoDto;
     }
 
     @DeleteMapping("/{idFormaPagamento}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void desassociar(@PathVariable Long id, @PathVariable Long idFormaPagamento){
+    public ResponseEntity<Void> desassociar(@PathVariable Long id, @PathVariable Long idFormaPagamento){
         this.cadastroRestauranteService.desassociarFormaPagamento(id, idFormaPagamento);
+
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{idFormaPagamento}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void associar(@PathVariable Long id, @PathVariable Long idFormaPagamento){
+    public ResponseEntity<Void> associar(@PathVariable Long id, @PathVariable Long idFormaPagamento){
         this.cadastroRestauranteService.associarFormaPagamento(id, idFormaPagamento);
+
+        return ResponseEntity.noContent().build();
     }
 }

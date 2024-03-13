@@ -194,4 +194,18 @@ public class LinkToResource {
     public Link linkToFormasPagamento(){
         return this.linkToFormasPagamento(IanaLinkRelations.SELF.value());
     }
+
+    public Link linkToFormaPagamentoDesassociacao(Long restauranteId, Long formaPagamentoId, String rel){
+        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
+                .methodOn(RestauranteFormaPagamentoController.class)
+                .desassociar(restauranteId, formaPagamentoId))
+                .withRel(rel);
+    }
+
+    public Link linkToFormaPagamentAssociacao(Long restauranteId, String rel){
+        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
+                .methodOn(RestauranteFormaPagamentoController.class)
+                .associar(restauranteId, null))
+                .withRel(rel);
+    }
 }
