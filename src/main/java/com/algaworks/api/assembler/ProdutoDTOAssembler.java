@@ -1,24 +1,34 @@
 package com.algaworks.api.assembler;
 
+import com.algaworks.api.LinkToResource;
+import com.algaworks.api.controller.RestauranteProdutoController;
 import com.algaworks.api.model.ProdutoDTO;
 import com.algaworks.domain.model.Produto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Component
-public class ProdutoDTOAssembler {
+public class ProdutoDTOAssembler extends RepresentationModelAssemblerSupport<Produto, ProdutoDTO> {
     @Autowired
     private ModelMapper modelMapper;
 
-    public ProdutoDTO toDTO(Produto produto){
-        return this.modelMapper.map(produto, ProdutoDTO.class);
+    @Autowired
+    private LinkToResource linkToResource;
+
+    public ProdutoDTOAssembler(){
+        super(RestauranteProdutoController.class, ProdutoDTO.class);
     }
 
-    public List<ProdutoDTO> toCollectionDTO(List<Produto> produtos){
-        return produtos.stream().map(this::toDTO).collect(Collectors.toList());
+    @Override
+    public ProdutoDTO toModel(Produto produto) {
+        ProdutoDTO produtoDTO = createModelWithId(produto.getId(), produto, produto.getRestaurante().getId());
+
+        this.modelMapper.map(produto, produtoDTO);
+
+        produtoDTO.add(this.linkToResource.linkToProdutos(produto.getId(), "produtos"));
+
+        return produtoDTO;
     }
 }

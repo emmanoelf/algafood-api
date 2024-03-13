@@ -121,6 +121,17 @@ public class LinkToResource {
         return this.linkToProduto(restauranteId, produtoId, IanaLinkRelations.SELF.value());
     }
 
+    public Link linkToProdutos(Long restauranteId, String rel){
+        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
+                .methodOn(RestauranteProdutoController.class)
+                .listar(restauranteId, null))
+                .withRel(rel);
+    }
+
+    public Link linkToProdutos(Long id){
+        return this.linkToProdutos(id, IanaLinkRelations.SELF.value());
+    }
+
     public Link linkToCozinhas(String rel){
         return WebMvcLinkBuilder.linkTo(CozinhaController.class).withRel(rel);
     }

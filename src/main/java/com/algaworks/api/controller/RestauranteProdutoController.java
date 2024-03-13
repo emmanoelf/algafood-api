@@ -1,5 +1,6 @@
 package com.algaworks.api.controller;
 
+import com.algaworks.api.LinkToResource;
 import com.algaworks.api.assembler.ProdutoDTOAssembler;
 import com.algaworks.api.assembler.ProdutoInputDisassembler;
 import com.algaworks.api.model.ProdutoDTO;
@@ -11,6 +12,7 @@ import com.algaworks.domain.repository.ProdutoRepository;
 import com.algaworks.domain.service.CadastroProdutoService;
 import com.algaworks.domain.service.CadastroRestauranteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -36,25 +38,28 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
     @Autowired
     private ProdutoInputDisassembler produtoInputDisassembler;
 
+    @Autowired
+    private LinkToResource linkToResource;
+
     @GetMapping
-    public List<ProdutoDTO> listar(@PathVariable Long restauranteId,
-                                   @RequestParam(required = false) boolean incluirInativos){
+    public CollectionModel<ProdutoDTO> listar(@PathVariable Long restauranteId,
+                                              @RequestParam(required = false, defaultValue = "false") Boolean incluirInativos){
         Restaurante restaurante = this.cadastroRestauranteService.buscarOuFalhar(restauranteId);
         List<Produto> produtos = null;
 
         if(incluirInativos){
             produtos = this.produtoRepository.findTodosByRestaurante(restaurante);
         } else{
-            produtos =this.produtoRepository.findAtivosByRestaurante(restaurante);
+            produtos = this.produtoRepository.findAtivosByRestaurante(restaurante);
         }
 
-        return this.produtoDTOAssembler.toCollectionDTO(produtos);
+        return this.produtoDTOAssembler.toCollectionModel(produtos).add(this.linkToResource.linkToProdutos(restauranteId));
     }
 
     @GetMapping("/{produtoId}")
     public ProdutoDTO buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId){
         Produto produto = this.cadastroProdutoService.buscarOuFalhar(restauranteId, produtoId);
-        return this.produtoDTOAssembler.toDTO(produto);
+        return this.produtoDTOAssembler.toModel(produto);
     }
 
     @PostMapping
@@ -64,7 +69,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         Produto produto = this.produtoInputDisassembler.toDomainObject(produtoInput);
         produto.setRestaurante(restaurante);
         produto = this.cadastroProdutoService.save(produto);
-        return this.produtoDTOAssembler.toDTO(produto);
+        return this.produtoDTOAssembler.toModel(produto);
     }
 
     @PutMapping("/{produtoId}")
@@ -73,7 +78,7 @@ public class RestauranteProdutoController implements RestauranteProdutoControlle
         Produto produto = this.cadastroProdutoService.buscarOuFalhar(restauranteId, produtoId);
         this.produtoInputDisassembler.copyToDomainObject(produtoInput, produto);
         produto = this.cadastroProdutoService.save(produto);
-        return this.produtoDTOAssembler.toDTO(produto);
+        return this.produtoDTOAssembler.toModel(produto);
     }
 
 }
