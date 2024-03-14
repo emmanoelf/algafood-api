@@ -256,4 +256,31 @@ public class LinkToResource {
     public Link linkToGrupoPermissoes(Long id, String rel){
         return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(GrupoPermissaoController.class).listar(id)).withRel(rel);
     }
+
+    public Link linkToGrupoPermissoes(Long id){
+        return this.linkToGrupoPermissoes(id, IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToPermissoes(String rel){
+        return WebMvcLinkBuilder.linkTo(PermissaoController.class).withRel(rel);
+    }
+
+    public Link linkToPermissoes(){
+        return this.linkToPermissoes(IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToGrupoPermissaoAssociacao(Long grupoId, String rel){
+        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
+                .methodOn(GrupoPermissaoController.class)
+                .associarPermissao(grupoId, null))
+                .withRel(rel);
+    }
+
+    public Link linkToGrupoPermissaoDesassociacao(Long grupoId, Long permissaoId, String rel){
+        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
+                .methodOn(GrupoPermissaoController.class)
+                .desassociarPermissao(permissaoId, grupoId))
+                .withRel(rel);
+    }
+
 }
