@@ -3,8 +3,7 @@ package com.algaworks.api.openapi.controller;
 import com.algaworks.api.exceptionhandler.Problem;
 import com.algaworks.api.model.GrupoDTO;
 import io.swagger.annotations.*;
-
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 @Api(tags = "Usuários")
 public interface UsuarioGrupoControllerOpenApi {
@@ -12,7 +11,7 @@ public interface UsuarioGrupoControllerOpenApi {
     @ApiResponses({
             @ApiResponse(code = 404, message = "Usuário não encontrado", response = Problem.class)
     })
-    List<GrupoDTO> listar(
+    CollectionModel<GrupoDTO> listar(
             @ApiParam(value = "ID do usuário", example = "1", required = true)
             Long usuarioId);
 

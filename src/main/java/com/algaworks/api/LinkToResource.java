@@ -244,4 +244,16 @@ public class LinkToResource {
     public Link linkToFotoProduto(Long restauranteId, Long produtoId){
         return this.linkToFotoProduto(restauranteId, produtoId, IanaLinkRelations.SELF.value());
     }
+
+    public Link linkToGrupos(String rel){
+        return WebMvcLinkBuilder.linkTo(GrupoController.class).withRel(rel);
+    }
+
+    public Link linkToGrupos(){
+        return this.linkToGrupos(IanaLinkRelations.SELF.value());
+    }
+
+    public Link linkToGrupoPermissoes(Long id, String rel){
+        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(GrupoPermissaoController.class).listar(id)).withRel(rel);
+    }
 }

@@ -9,6 +9,7 @@ import com.algaworks.domain.model.Grupo;
 import com.algaworks.domain.repository.GrupoRespository;
 import com.algaworks.domain.service.CadastroGrupoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -32,15 +33,15 @@ public class GrupoController implements GrupoControllerOpenApi {
     private GrupoInputDisassembler grupoInputDisassembler;
 
     @GetMapping
-    public List<GrupoDTO> listar(){
+    public CollectionModel<GrupoDTO> listar(){
         List<Grupo> grupos = this.grupoRespository.findAll();
-        return this.grupoDTOAssembler.toCollectionList(grupos);
+        return this.grupoDTOAssembler.toCollectionModel(grupos);
     }
 
     @GetMapping("/{id}")
     public GrupoDTO buscar(@PathVariable Long id){
         Grupo grupo = this.cadastroGrupoService.buscarOuFalhar(id);
-        return this.grupoDTOAssembler.toDTO(grupo);
+        return this.grupoDTOAssembler.toModel(grupo);
     }
 
     @PostMapping
@@ -48,7 +49,7 @@ public class GrupoController implements GrupoControllerOpenApi {
     public GrupoDTO adicionar(@RequestBody @Valid GrupoInput grupoInput){
         Grupo grupo = this.grupoInputDisassembler.toDomainObject(grupoInput);
         grupo = this.cadastroGrupoService.salvar(grupo);
-        return this.grupoDTOAssembler.toDTO(grupo);
+        return this.grupoDTOAssembler.toModel(grupo);
     }
 
     @PutMapping("/{id}")
@@ -56,7 +57,7 @@ public class GrupoController implements GrupoControllerOpenApi {
         Grupo grupo = this.cadastroGrupoService.buscarOuFalhar(id);
         this.grupoInputDisassembler.copyToDomainObject(grupoInput, grupo);
         grupo = this.cadastroGrupoService.salvar(grupo);
-        return this.grupoDTOAssembler.toDTO(grupo);
+        return this.grupoDTOAssembler.toModel(grupo);
     }
 
     @DeleteMapping("/{id}")
