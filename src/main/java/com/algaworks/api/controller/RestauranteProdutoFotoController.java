@@ -57,13 +57,13 @@ public class RestauranteProdutoFotoController implements RestauranteProdutoFotoC
 
         FotoProduto fotoSalva = catalogoFotoProdutoService.salvar(fotoProduto, arquivo.getInputStream());
 
-        return this.fotoProdutoDTOAssembler.toDTO(fotoSalva);
+        return this.fotoProdutoDTOAssembler.toModel(fotoSalva);
     }
 
     @GetMapping
     public FotoProdutoDTO buscar(@PathVariable Long restauranteId, @PathVariable Long produtoId){
         FotoProduto fotoProduto = this.catalogoFotoProdutoService.buscarOuFalhar(restauranteId, produtoId);
-        return this.fotoProdutoDTOAssembler.toDTO(fotoProduto);
+        return this.fotoProdutoDTOAssembler.toModel(fotoProduto);
     }
 
     @GetMapping(produces = MediaType.ALL_VALUE)

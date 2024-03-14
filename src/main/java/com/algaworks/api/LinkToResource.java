@@ -233,4 +233,15 @@ public class LinkToResource {
                 .desassociarResponsavel(restauranteId, null))
                 .withRel(rel);
     }
+
+    public Link linkToFotoProduto(Long restauranteId, Long produtoId, String rel){
+        return WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
+                .methodOn(RestauranteProdutoFotoController.class)
+                .buscar(restauranteId, produtoId))
+                .withRel(rel);
+    }
+
+    public Link linkToFotoProduto(Long restauranteId, Long produtoId){
+        return this.linkToFotoProduto(restauranteId, produtoId, IanaLinkRelations.SELF.value());
+    }
 }

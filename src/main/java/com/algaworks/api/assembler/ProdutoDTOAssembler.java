@@ -29,6 +29,8 @@ public class ProdutoDTOAssembler extends RepresentationModelAssemblerSupport<Pro
 
         produtoDTO.add(this.linkToResource.linkToProdutos(produto.getId(), "produtos"));
 
+        produtoDTO.add(this.linkToResource.linkToFotoProduto(produto.getRestaurante().getId(), produto.getId(), "foto"));
+
         return produtoDTO;
     }
 }
